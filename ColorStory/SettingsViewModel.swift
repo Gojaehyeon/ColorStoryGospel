@@ -11,6 +11,7 @@ class SettingsViewModel: ObservableObject {
             }
         }
     }
+    @Published var selectedLanguage: String = Locale.current.language.languageCode?.identifier ?? "ko" // "ko" 또는 "en"
     
     let audioManager = AudioManager()
     

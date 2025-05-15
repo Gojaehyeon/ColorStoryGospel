@@ -17,7 +17,7 @@ struct StoryView: View {
                 .ignoresSafeArea()
             
             if settings.showText {
-                Text(slide.description)
+                Text(slide.localizedDescription(language: settings.selectedLanguage))
                     .font(.system(size: 26, weight: .bold))
                     .padding()
                     .foregroundColor(slide.colorName == "검정색" ? .white : .black)
