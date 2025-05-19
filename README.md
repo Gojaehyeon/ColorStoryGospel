@@ -49,6 +49,26 @@ Color Story는 색깔을 통해 예수님의 복음을 쉽게 전달할 수 있�
 
 ---
 
+## 🙋‍♂️ Author / 제작자
+
+<div align="left" style="display: flex; align-items: center; gap: 32px;">
+
+  <img src="https://avatars.githubusercontent.com/u/149154032?v=4" width="230" style="border-radius: 12px;" />
+
+  <div style="flex: 1;">
+    <strong style="font-size: 20px;">고재현 (Go Jaehyun)</strong><br>
+    <span style="font-size: 16px;">Indie iOS/macOS Developer · Product Designer                       </span><br><br>
+    <ul>
+      <li><strong>GitHub:</strong> <a href="https://github.com/Gojaehyeon">@Gojaehyeon</a></li>
+      <li>✨ I make tools that simplify daily workflows.</li>
+      <li>🛠️ Always building for real-life use cases.</li>
+      <li>🚀 Dreaming of working in Silicon Valley</li>
+    </ul>
+  </div>
+
+</div>
+
+---
 
 ## 🙏 Vision | 비전
 
@@ -66,3 +86,14 @@ Color Story가 복음을 사람들의 마음에 자연스럽게 심어주는 따
 - Instagram: [@gojaehyun.go]  
 
 ---
+
+## 📅 Development Timeline | 개발 타임라인
+
+| Date | Description |
+|------|-------------|
+| **2024-05-14** | 💡 Color Story 아이디어 정리 및 기획 |
+| **2024-05-15** | 🛠 앱 기능 구현 시작 (슬라이드 구성, 배경음악, 텍스트 설정 등) |
+| **2024-05-16** | 📝 앱 설명 및 프로모션 문구, 키워드 작성 |
+| **2024-05-17** | 🌐 로컬라이징(한국어/영어) 및 메뉴 아이콘 반영 |
+| **2024-05-18** | 📤 App Store 제출 & Guideline 4.2 리젝 피드백 수신 |
+| **2024-05-19** | 🛠️ App Store 정책에 맞는 형태로 앱 수정 및 제출 완료 ☑️ 기능이 너무 없어도 리젝을 먹을 수 있음을 배웠음|
