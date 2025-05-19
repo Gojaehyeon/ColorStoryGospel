@@ -7,6 +7,30 @@ struct ColorGradientView: View {
     
     var gradientColors: [Color] {
         switch colorName {
+        case "다크그레이":
+            return [
+                Color(red: 0.13, green: 0.13, blue: 0.15),
+                Color(red: 0.18, green: 0.18, blue: 0.20),
+                Color(red: 0.13, green: 0.13, blue: 0.15),
+                Color(red: 0.18, green: 0.18, blue: 0.20),
+                Color(red: 0.13, green: 0.13, blue: 0.15)
+            ]
+        case "하늘색":
+            return [
+                Color(red: 0.4, green: 0.8, blue: 1.0),   // 밝은 하늘색
+                Color(red: 0.6, green: 0.9, blue: 1.0),   // 더 밝은 하늘색
+                Color(red: 0.4, green: 0.8, blue: 1.0),   // 밝은 하늘색
+                Color(red: 0.6, green: 0.9, blue: 1.0),   // 더 밝은 하늘색
+                Color(red: 0.4, green: 0.8, blue: 1.0)    // 밝은 하늘색
+            ]
+        case "초록색":
+            return [
+                Color(red: 0.0, green: 0.6, blue: 0.0),   // 진한 초록색
+                Color(red: 0.0, green: 0.8, blue: 0.0),   // 밝은 초록색
+                Color(red: 0.0, green: 0.6, blue: 0.0),   // 진한 초록색
+                Color(red: 0.0, green: 0.8, blue: 0.0),   // 밝은 초록색
+                Color(red: 0.0, green: 0.6, blue: 0.0)    // 진한 초록색
+            ]
         case "금색":
             return [
                 Color(red: 1.0, green: 0.84, blue: 0.0),  // 밝은 금색
