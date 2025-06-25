@@ -263,8 +263,7 @@ struct CountdownCoverView: View {
 struct GospelSlidesCover: View {
     @EnvironmentObject var settings: SettingsViewModel
     let onDone: () -> Void
-    @State private var slideIndex: Int = 1 // 첫 슬라이드는 1부터 시작(표지 제외)
-    @State private var showComplete: Bool = false
+    @State private var slideIndex: Int = 0 // 0부터 시작
     @State private var showBibleVerse: Bool = false
     
     var gospelSlides: [ColorSlide] {
@@ -277,48 +276,60 @@ struct GospelSlidesCover: View {
     
     var body: some View {
         ZStack {
-            if showComplete {
-                GospelCompleteModal(onDone: onDone)
-                    .environmentObject(settings)
-            } else {
-                TabView(selection: $slideIndex) {
-                    ForEach(1..<gospelSlides.count+1, id: \ .self) { idx in
-                        let slide = gospelSlides[idx-1]
-                        StoryView(
-                            slide: slide,
-                            showBibleButton: !isGreenSlide(idx: idx),
-                            onShowBible: { showBibleVerse = true },
-                            isGreen: isGreenSlide(idx: idx),
-                            onFinish: {
-                                withAnimation {
-                                    showComplete = true
-                                }
-                            }
-                        )
+            TabView(selection: $slideIndex) {
+                ForEach(0..<gospelSlides.count, id: \ .self) { idx in
+                    let slide = gospelSlides[idx]
+                    StoryView(slide: slide, isFirst: false)
                         .tag(idx)
-                    }
                 }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
-                .ignoresSafeArea()
-                .onChange(of: slideIndex) { newValue in
-                    if newValue == gospelSlides.count + 1 {
-                        withAnimation {
-                            showComplete = true
-                        }
+            }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
+            .ignoresSafeArea()
+            .onChange(of: slideIndex) { newValue in
+                // 마지막 슬라이드에서 끝내기 버튼으로만 완료
+            }
+            // 북(모달) 버튼: 모든 슬라이드에서 항상 우측 하단 고정
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    Button(action: { showBibleVerse = true }) {
+                        Image(systemName: "book.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.black.opacity(0.3))
+                            .clipShape(Circle())
                     }
+                    .padding(.trailing, 20)
+                    .padding(.bottom, 20)
                 }
-                .sheet(isPresented: $showBibleVerse) {
-                    if slideIndex > 0 && slideIndex <= gospelSlides.count {
-                        BibleVerseView(slide: gospelSlides[slideIndex-1])
+            }
+            // 끝내기 버튼: 초록색(마지막) 슬라이드에서만 하단 중앙에 표시
+            if greenIndex.map({ slideIndex == $0 }) == true {
+                VStack {
+                    Spacer()
+                    Button(action: {
+                        onDone()
+                    }) {
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 28, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding(28)
+                            .background(Color(red: 0.4, green: 0.8, blue: 1.0))
+                            .clipShape(Circle())
+                            .shadow(radius: 8)
                     }
+                    .padding(.bottom, 32)
                 }
             }
         }
+        .sheet(isPresented: $showBibleVerse) {
+            if slideIndex >= 0 && slideIndex < gospelSlides.count {
+                BibleVerseView(slide: gospelSlides[slideIndex])
+            }
+        }
         .background(Color(.systemBackground).ignoresSafeArea())
-    }
-    
-    func isGreenSlide(idx: Int) -> Bool {
-        greenIndex.map { $0 + 1 == idx } ?? false
     }
 }
 

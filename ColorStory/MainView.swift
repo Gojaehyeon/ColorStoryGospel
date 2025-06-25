@@ -64,7 +64,6 @@ struct ColorStoryTabView: View {
             }
         }
         .fullScreenCover(isPresented: $showSlidesCover, onDismiss: {
-            // 완료 후 닫히면 complete 상태로 전환
             gospelState = .complete
             showCompleteCover = true
         }) {

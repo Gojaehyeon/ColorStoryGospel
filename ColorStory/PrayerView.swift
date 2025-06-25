@@ -13,6 +13,20 @@ struct PrayerItem: Identifiable, Hashable, Codable {
 }
 
 struct PrayerView: View {
+    var body: some View {
+        Group {
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                PrayerContentView()
+            } else {
+                NavigationView {
+                    PrayerContentView()
+                }
+            }
+        }
+    }
+}
+
+struct PrayerContentView: View {
     @EnvironmentObject var settings: SettingsViewModel
     @State private var prayers: [PrayerItem] = []
     @State private var newPrayer: String = ""
@@ -22,82 +36,80 @@ struct PrayerView: View {
     let storageKey = "prayer_items"
     
     var body: some View {
-        NavigationView {
-            VStack(spacing: 0) {
-                ScrollViewReader { scrollProxy in
-                    ScrollView {
-                        VStack(spacing: 12) {
-                            ForEach(prayers) { prayer in
-                                HStack {
-                                    Spacer()
-                                    VStack(alignment: .trailing, spacing: 4) {
-                                        Text(prayer.text)
-                                            .padding(.vertical, 10)
-                                            .padding(.horizontal, 18)
-                                            .background(Color(red: 0.4, green: 0.8, blue: 1.0))
-                                            .foregroundColor(.white)
-                                            .font(.body)
-                                            .cornerRadius(22)
-                                            .onLongPressGesture {
-                                                prayerToDelete = prayer
-                                                showDeleteAlert = true
-                                            }
-                                        Text(dateString(prayer.date))
-                                            .font(.caption2)
-                                            .foregroundColor(.gray)
-                                            .padding(.trailing, 6)
-                                    }
+        VStack(spacing: 0) {
+            ScrollViewReader { scrollProxy in
+                ScrollView {
+                    VStack(spacing: 12) {
+                        ForEach(prayers) { prayer in
+                            HStack {
+                                Spacer()
+                                VStack(alignment: .trailing, spacing: 4) {
+                                    Text(prayer.text)
+                                        .padding(.vertical, 10)
+                                        .padding(.horizontal, 18)
+                                        .background(Color(red: 0.4, green: 0.8, blue: 1.0))
+                                        .foregroundColor(.white)
+                                        .font(.body)
+                                        .cornerRadius(22)
+                                        .onLongPressGesture {
+                                            prayerToDelete = prayer
+                                            showDeleteAlert = true
+                                        }
+                                    Text(dateString(prayer.date))
+                                        .font(.caption2)
+                                        .foregroundColor(.gray)
+                                        .padding(.trailing, 6)
                                 }
-                                .id(prayer.id)
                             }
+                            .id(prayer.id)
                         }
-                        .padding(.top, 16)
-                        .padding(.horizontal, 8)
                     }
-                    .onChange(of: prayers.count) { _ in
-                        if let last = prayers.last {
-                            withAnimation {
-                                scrollProxy.scrollTo(last.id, anchor: .bottom)
-                            }
+                    .padding(.top, 16)
+                    .padding(.horizontal, 8)
+                }
+                .onChange(of: prayers.count) { _ in
+                    if let last = prayers.last {
+                        withAnimation {
+                            scrollProxy.scrollTo(last.id, anchor: .bottom)
                         }
                     }
                 }
-                Divider()
-                HStack {
-                    TextField(settings.selectedLanguage == "ko" ? "기도제목을 입력하세요" : "Enter your prayer request", text: $newPrayer)
-                        .textFieldStyle(PlainTextFieldStyle())
-                        .padding(12)
-                        .background(Color(.systemGray6))
-                        .cornerRadius(20)
-                    Button(action: addPrayer) {
-                        Image(systemName: "arrow.up")
-                            .foregroundColor(.white)
-                            .font(.system(size: 22, weight: .bold))
-                            .padding(10)
-                            .background(Color(red: 0.4, green: 0.8, blue: 1.0))
-                            .clipShape(Circle())
-                    }
-                    .disabled(newPrayer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+            Divider()
+            HStack {
+                TextField(settings.selectedLanguage == "ko" ? "기도제목을 입력하세요" : "Enter your prayer request", text: $newPrayer)
+                    .textFieldStyle(PlainTextFieldStyle())
+                    .padding(12)
+                    .background(Color(.systemGray6))
+                    .cornerRadius(20)
+                Button(action: addPrayer) {
+                    Image(systemName: "arrow.up")
+                        .foregroundColor(.white)
+                        .font(.system(size: 22, weight: .bold))
+                        .padding(10)
+                        .background(Color(red: 0.4, green: 0.8, blue: 1.0))
+                        .clipShape(Circle())
                 }
-                .padding(.horizontal)
-                .padding(.vertical, 8)
-                .background(Color(.systemBackground))
+                .disabled(newPrayer.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
-            .navigationTitle(settings.selectedLanguage == "ko" ? "기도제목" : "Prayer Request")
-            .navigationBarTitleDisplayMode(.inline)
-            .onAppear(perform: loadPrayers)
-            .alert(isPresented: $showDeleteAlert) {
-                Alert(
-                    title: Text(settings.selectedLanguage == "ko" ? "삭제" : "Delete"),
-                    message: Text(settings.selectedLanguage == "ko" ? "이 기도제목을 삭제할까요?" : "Delete this prayer request?"),
-                    primaryButton: .destructive(Text(settings.selectedLanguage == "ko" ? "삭제" : "Delete")) {
-                        if let prayer = prayerToDelete {
-                            deletePrayer(prayer)
-                        }
-                    },
-                    secondaryButton: .cancel(Text(settings.selectedLanguage == "ko" ? "취소" : "Cancel"))
-                )
-            }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+            .background(Color(.systemBackground))
+        }
+        .navigationTitle(settings.selectedLanguage == "ko" ? "기도제목" : "Prayer Request")
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear(perform: loadPrayers)
+        .alert(isPresented: $showDeleteAlert) {
+            Alert(
+                title: Text(settings.selectedLanguage == "ko" ? "삭제" : "Delete"),
+                message: Text(settings.selectedLanguage == "ko" ? "이 기도제목을 삭제할까요?" : "Delete this prayer request?"),
+                primaryButton: .destructive(Text(settings.selectedLanguage == "ko" ? "삭제" : "Delete")) {
+                    if let prayer = prayerToDelete {
+                        deletePrayer(prayer)
+                    }
+                },
+                secondaryButton: .cancel(Text(settings.selectedLanguage == "ko" ? "취소" : "Cancel"))
+            )
         }
     }
     
